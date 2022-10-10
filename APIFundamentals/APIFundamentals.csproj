@@ -16,4 +16,10 @@
       <Compile Remove="WeatherForecast.cs" />
     </ItemGroup>
 
+    <ItemGroup>
+      <None Update="Links.txt">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+    </ItemGroup>
+
 </Project>

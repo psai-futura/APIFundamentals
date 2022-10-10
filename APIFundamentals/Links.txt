@@ -1,0 +1,7 @@
+Properties in .NET 6
+
+https://www.c-sharpcorner.com/article/solution-non-nullable-property-must-contain-a-non-null-value-in-net-6/
+
+Introduction to Docker and kubernetes
+
+https://app.pluralsight.com/library/courses/docker-kubernetes-big-picture/table-of-contents

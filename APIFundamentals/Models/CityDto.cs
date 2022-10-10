@@ -12,7 +12,7 @@ public class CityDto
     {
         get
         {
-            return PointsOfInterest.Count;
+            return PointsOfInterest.Count; 
         }
     }
     
