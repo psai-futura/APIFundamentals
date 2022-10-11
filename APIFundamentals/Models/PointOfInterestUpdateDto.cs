@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace APIFundamentals.Models;
 
-public class PointOfInterestCreateDto
+public class PointOfInterestUpdateDto
 {
     [Required(ErrorMessage = "Please provide Name value")]
     [MaxLength(50)]
