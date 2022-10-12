@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using APIFundamentals.Models;
 using Microsoft.AspNetCore.Http;
@@ -13,6 +14,14 @@ namespace APIFundamentals.Controllers
     [ApiController]
     public class PointOfInterestController : ControllerBase
     {
+        private readonly ILogger<PointOfInterestController> _logger;
+        public PointOfInterestController(ILogger<PointOfInterestController> logger)
+        {
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+        }
+        
+        
+        
         // public bool ValidateCity(int cityId, ref CityDto? cityData)
         // {
         //     //cityData = null;
@@ -30,11 +39,25 @@ namespace APIFundamentals.Controllers
         [HttpGet]
         public ActionResult<IEnumerable<PointsOfInterestDto>> GetPointsOfInterest(int cityId)
         {
-            var city = CitiesDataStore.Current.Cities.FirstOrDefault(c => c.Id == cityId);
-             if (city == null)
-                 return NotFound();
+            try
+            {
+               // throw new Exception("Errrrror");
+                var city = CitiesDataStore.Current.Cities.FirstOrDefault(c => c.Id == cityId);
+                if (city == null)
+                {
+                    _logger.LogInformation($"City Id {cityId} not found!");
+                    return NotFound();
+                }
 
-            return Ok(city.PointsOfInterest);
+                return Ok(city.PointsOfInterest);
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogCritical($"Exception occured for city Id {cityId}",ex);
+                return StatusCode(500, "Problem happened while handling your request.");
+            }
+           
         }
 
         [HttpGet("{pointOfInterestId}", Name = "GetSinglePointOfInterest")]
