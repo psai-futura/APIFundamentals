@@ -1,4 +1,6 @@
 using APIFundamentals.Models;
+using APIFundamentals.Services;
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 
 namespace APIFundamentals.Controllers;
@@ -7,29 +9,40 @@ namespace APIFundamentals.Controllers;
 [Route("api/cities")]
 public class CitiesController : ControllerBase
 {
-    private readonly CitiesDataStore _citiesDataStore;
+    private readonly ICityInfoRepository _cityInfoRepository;
 
-    public CitiesController( CitiesDataStore citiesDataStore)
+    private readonly IMapper _mapper;
+    
+
+    public CitiesController(ICityInfoRepository cityInfoRepository, IMapper mapper)
     {
-        _citiesDataStore = citiesDataStore?? throw new NullReferenceException(nameof(citiesDataStore));
+        _cityInfoRepository = cityInfoRepository ?? throw new ArgumentNullException(nameof(cityInfoRepository));
+
+       _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
     }
 
     [HttpGet]
-    public ActionResult< IEnumerable<CityDto>> GetCities()
+    public async Task<ActionResult< IEnumerable<CityWithoutPointOfInterestDto>>> GetCities()
     {
-        return Ok(_citiesDataStore.Cities);
-       // return new JsonResult(CitiesDataStore.Current.Cities);
+        var cityEntities = await _cityInfoRepository.GetCitiesAsync();
+
+        return Ok(_mapper.Map<IEnumerable<CityWithoutPointOfInterestDto>>(cityEntities));
     }
 
     [HttpGet("{id}")]
-    public ActionResult<CityDto> GetCity(int id)
+    public async Task<IActionResult> GetCity(int id, bool showPointsOfInterest= false)
     {
-        var cityToReturn = _citiesDataStore.Cities.FirstOrDefault(c => c.Id == id);
+        var city = await _cityInfoRepository.GetCityAsync(id, showPointsOfInterest);
 
-        if (cityToReturn == null)
+        if (city == null)
+        {
             return NotFound();
-
-        return Ok(cityToReturn);
+        }
+        if (showPointsOfInterest)
+        {
+            return Ok(_mapper.Map<CityDto>(city));
+        }
+        return Ok(_mapper.Map<CityWithoutPointOfInterestDto>(city));
     }
 }
 
