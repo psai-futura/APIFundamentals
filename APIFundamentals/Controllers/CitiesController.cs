@@ -2,6 +2,9 @@ using APIFundamentals.Models;
 using APIFundamentals.Services;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
+using System.Text.Json;
+using JsonSerializer = System.Text.Json.JsonSerializer;
 
 namespace APIFundamentals.Controllers;
 
@@ -31,7 +34,10 @@ public class CitiesController : ControllerBase
         {
             pageSize = maxCitiesPageSize;
         }
-        var cityEntities = await _cityInfoRepository.GetCitiesAsync(name,searchQuery,pageNumber,pageSize);
+        var (cityEntities, paginationMetaData) = await _cityInfoRepository
+            .GetCitiesAsync(name,searchQuery,pageNumber,pageSize);
+        
+        Response.Headers.Add("X-Pagination", JsonSerializer.Serialize(paginationMetaData));
 
         return Ok(_mapper.Map<IEnumerable<CityWithoutPointOfInterestDto>>(cityEntities));
     }
