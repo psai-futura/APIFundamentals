@@ -35,6 +35,19 @@ namespace APIFundamentals.Controllers
         {
             try
             {
+                var cityName = User.Claims.FirstOrDefault(c => c.Type == "city")?.Value;
+
+                if (!await _cityInfoRepository.CityNameMatchesCityId(cityName, cityId))
+                {
+                    return Forbid();
+                }
+                
+                if(!await _cityInfoRepository.CityExistsAsync(cityId))
+                {
+                    _logger.LogInformation($"City with Id {cityId} was not found");
+                    return NotFound();
+                }
+                
                 var pointOfInterest = await _cityInfoRepository.GetPointsOfInterestAsync(cityId);
 
                 return Ok(_mapper.Map<IEnumerable<PointsOfInterestDto>>(pointOfInterest));
