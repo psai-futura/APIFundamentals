@@ -2,12 +2,14 @@ using APIFundamentals.Entities;
 using APIFundamentals.Models;
 using APIFundamentals.Services;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 
 namespace APIFundamentals.Controllers
 {
     [Route("api/cities/{cityId}/pointsOfInterest")]
+    [Authorize]
     [ApiController]
     public class PointOfInterestController : ControllerBase
     {
