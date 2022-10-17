@@ -6,6 +6,7 @@ public interface ICityInfoRepository
 {
     Task<bool> CityExistsAsync(int cityId);
     Task<IEnumerable<City>> GetCitiesAsync();
+    Task<IEnumerable<City>> GetCitiesAsync(string? name, string? searchQuery);
 
     Task<City?> GetCityAsync(int cityId,bool showPointOfInterest);
 
