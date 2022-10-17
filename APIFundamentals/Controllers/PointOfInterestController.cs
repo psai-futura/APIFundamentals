@@ -8,8 +8,9 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace APIFundamentals.Controllers
 {
-    [Route("api/cities/{cityId}/pointsOfInterest")]
+    [Route("api/v{version:apiVersion}/cities/{cityId}/pointsOfInterest")]
     //[Authorize(Policy = "MustBeFromBerlin")]
+    [ApiVersion("2.0")]
     [ApiController]
     public class PointOfInterestController : ControllerBase
     {
@@ -35,12 +36,12 @@ namespace APIFundamentals.Controllers
         {
             try
             {
-                var cityName = User.Claims.FirstOrDefault(c => c.Type == "city")?.Value;
-
-                if (!await _cityInfoRepository.CityNameMatchesCityId(cityName, cityId))
-                {
-                    return Forbid();
-                }
+                // var cityName = User.Claims.FirstOrDefault(c => c.Type == "city")?.Value;
+                //
+                // if (!await _cityInfoRepository.CityNameMatchesCityId(cityName, cityId))
+                // {
+                //     return Forbid();
+                // }
                 
                 if(!await _cityInfoRepository.CityExistsAsync(cityId))
                 {

@@ -11,7 +11,8 @@ namespace APIFundamentals.Controllers;
 
 [ApiController]
 //[Authorize]
-[Route("api/cities")]
+[ApiVersion("1.0")]
+[Route("api/v{version:apiVersion}/cities")]
 public class CitiesController : ControllerBase
 {
     private readonly ICityInfoRepository _cityInfoRepository;
