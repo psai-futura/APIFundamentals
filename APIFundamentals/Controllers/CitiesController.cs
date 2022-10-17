@@ -10,7 +10,7 @@ using JsonSerializer = System.Text.Json.JsonSerializer;
 namespace APIFundamentals.Controllers;
 
 [ApiController]
-[Authorize]
+//[Authorize]
 [Route("api/cities")]
 public class CitiesController : ControllerBase
 {

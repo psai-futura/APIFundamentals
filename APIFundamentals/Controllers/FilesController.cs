@@ -11,7 +11,7 @@ using Microsoft.AspNetCore.StaticFiles;
 namespace APIFundamentals.Controllers
 {
     [Route("api/files")]
-    [Authorize]
+   // [Authorize]
     [ApiController]
     public class FilesController : ControllerBase
     {
