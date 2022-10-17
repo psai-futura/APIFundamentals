@@ -26,13 +26,8 @@ public class CityInfoRepository : ICityInfoRepository
     }
 
 
-    public async Task<IEnumerable<City>> GetCitiesAsync(string? name, string? searchQuery)
+    public async Task<IEnumerable<City>> GetCitiesAsync(string? name, string? searchQuery,int pageNumber, int pageSize)
     {
-        if (string.IsNullOrEmpty(name) && string.IsNullOrWhiteSpace(searchQuery))
-        {
-            return await GetCitiesAsync();
-        }
-
         //Getting all cities
         var citiesList = _context.Cities as IQueryable<City>;
 
@@ -50,7 +45,10 @@ public class CityInfoRepository : ICityInfoRepository
 
         }
 
-        return await citiesList.OrderBy(c => c.Name).ToListAsync();
+        return await citiesList.OrderBy(c => c.Name)
+            .Skip(pageSize * (pageNumber - 1))
+            .Take(pageSize)
+            .ToListAsync();
     }
 
     public async Task<City?> GetCityAsync(int cityId, bool showPointOfInterest)
