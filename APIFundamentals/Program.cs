@@ -64,6 +64,16 @@ builder.Services.AddAuthentication("Bearer").AddJwtBearer(options =>
     };
 });
 
+builder.Services.AddAuthorization(options =>
+    {
+        options.AddPolicy("MustBeFromBerlin", policy =>
+        {
+            policy.RequireAuthenticatedUser();
+            policy.RequireClaim("city", "Berlin");
+        });
+    }
+);
+
 
 var app = builder.Build();
 
