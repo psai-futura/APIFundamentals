@@ -10,7 +10,7 @@ using JsonSerializer = System.Text.Json.JsonSerializer;
 namespace APIFundamentals.Controllers;
 
 [ApiController]
-//[Authorize]
+[Authorize]
 [ApiVersion("1.0")]
 [Route("api/v{version:apiVersion}/cities")]
 public class CitiesController : ControllerBase
@@ -45,7 +45,17 @@ public class CitiesController : ControllerBase
         return Ok(_mapper.Map<IEnumerable<CityWithoutPointOfInterestDto>>(cityEntities));
     }
 
+    /// <summary>
+    /// Get a city by Id
+    /// </summary>
+    /// <param name="id">The id of City to get</param>
+    /// <param name="showPointsOfInterest">Whether or not to include the points of interest</param>
+    /// <returns>An IActionResult</returns>
+    /// <response code="200">Returns the requested city</response>
     [HttpGet("{id}")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetCity(int id, bool showPointsOfInterest= false)
     {
         var city = await _cityInfoRepository.GetCityAsync(id, showPointsOfInterest);
